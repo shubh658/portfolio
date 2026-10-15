@@ -13,59 +13,69 @@ import { projectsData } from './data/projects.js';
 import { profileData } from './data/profile.js';
 import { showToast } from './utils/toast.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   const app = document.getElementById('app');
   if (!app) return;
 
-  // Render all layout components into the DOM
-  app.innerHTML = `
-    ${renderNavbar()}
-    <main>
-      ${renderHero()}
-      ${renderAbout()}
-      ${renderEducation()}
-      ${renderSkills()}
-      ${renderProjects()}
-      ${renderCertificates()}
-      ${renderExperience()}
-      ${renderResume()}
-      ${renderContact()}
-    </main>
-    ${renderFooter()}
+  try {
+    // Render all layout components into the DOM
+    app.innerHTML = `
+      ${renderNavbar()}
+      <main>
+        ${renderHero()}
+        ${renderAbout()}
+        ${renderEducation()}
+        ${renderSkills()}
+        ${renderProjects()}
+        ${renderCertificates()}
+        ${renderExperience()}
+        ${renderResume()}
+        ${renderContact()}
+      </main>
+      ${renderFooter()}
 
-    <!-- Project Architecture Modal Container -->
-    <div id="project-modal" class="modal-backdrop" aria-hidden="true" role="dialog">
-      <div class="modal-container p-6 sm:p-8 relative">
-        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-            <span id="modal-category" class="text-xs font-mono uppercase text-sky-400 font-semibold"></span>
+      <!-- Project Architecture Modal Container -->
+      <div id="project-modal" class="modal-backdrop" aria-hidden="true" role="dialog">
+        <div class="modal-container p-6 sm:p-8 relative">
+          <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+              <span id="modal-category" class="text-xs font-mono uppercase text-sky-400 font-semibold"></span>
+            </div>
+            <button id="modal-close-btn" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" aria-label="Close Dialog">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
           </div>
-          <button id="modal-close-btn" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" aria-label="Close Dialog">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-        
-        <div id="modal-content" class="overflow-y-auto max-h-[70vh] pr-2 space-y-4">
-          <!-- Populated dynamically via JS -->
+          
+          <div id="modal-content" class="overflow-y-auto max-h-[70vh] pr-2 space-y-4">
+            <!-- Populated dynamically via JS -->
+          </div>
         </div>
       </div>
-    </div>
-  `;
+    `;
 
-  // Initialize Lucide Icons
-  if (window.lucide) {
-    window.lucide.createIcons();
+    // Initialize Lucide Icons
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    // Setup Event Handlers
+    setupMobileNavigation();
+    setupScrollSpy();
+    setupCopyButtons();
+    setupProjectModals();
+    setupContactForm();
+    setupBackToTop();
+  } catch (err) {
+    console.error('Error initializing portfolio:', err);
   }
+}
 
-  // Setup Event Handlers
-  setupMobileNavigation();
-  setupScrollSpy();
-  setupCopyButtons();
-  setupProjectModals();
-  setupContactForm();
-  setupBackToTop();
-});
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 // Mobile Navigation Handling
 function setupMobileNavigation() {
